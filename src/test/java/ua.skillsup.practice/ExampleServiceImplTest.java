@@ -3,22 +3,18 @@ package ua.skillsup.practice;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyByte;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExampleServiceTest {
+public class ExampleServiceImplTest {
 
     public static final String PROPER_TITLE = "proper title";
     public static final BigDecimal PRICE_FOR_ROUND  = BigDecimal.valueOf(16.568);
@@ -31,19 +27,17 @@ public class ExampleServiceTest {
     @Spy
     ExampleDaoImpl dao;
 
-    ExampleEntity entity = new ExampleEntity();
-
     ExampleService service;
 
     @Before
     public void before() {
-        service = new ExampleServiceImpl(dao, entity);
+        service = new ExampleServiceImpl(dao);
     }
 
     @Test
     public void shouldRoundWhenPriceHasMoreDecimalPoints() {
         service.addNewItem(PROPER_TITLE, PRICE_FOR_ROUND);
-        verify(dao).store(entity);
+        verify(dao).store(any());
     }
 
     @Test

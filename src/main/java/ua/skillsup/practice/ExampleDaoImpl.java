@@ -9,7 +9,7 @@ public class ExampleDaoImpl implements ExampleDao {
 
     @Override
     public boolean store(ExampleEntity entity) throws ExampleNetworkException {
-        if (!entities.contains(entity)) {
+        if (entities.stream().noneMatch(element -> element.getTitle().equals(entity.getTitle()))) {
             entities.add(entity);
             return true;
         } else {

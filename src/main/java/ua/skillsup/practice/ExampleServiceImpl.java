@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class ExampleServiceImpl implements ExampleService {
 
     private ExampleDaoImpl dao;
-    private ExampleEntity entity;
+//    private ExampleEntity entity;
 
-    public ExampleServiceImpl(ExampleDaoImpl dao, ExampleEntity entity) {
+    public ExampleServiceImpl(ExampleDaoImpl dao) {
         this.dao = dao;
-        this.entity = entity;
+//        this.entity = entity;
     }
 
     @Override
@@ -34,10 +34,11 @@ public class ExampleServiceImpl implements ExampleService {
         if (price.longValue() < 15) {
             return;
         }
-        this.entity.setId(new Random().nextLong());
-        this.entity.setTitle(title);
-        this.entity.setDateIn(Instant.now());
-        this.entity.setPrice(price);
+        ExampleEntity entity = new ExampleEntity();
+        entity.setId(new Random().nextLong());
+        entity.setTitle(title);
+        entity.setDateIn(Instant.now());
+        entity.setPrice(price);
         if(!dao.store(entity)) {
             throw new IllegalArgumentException("Title is should be unique");
         }
