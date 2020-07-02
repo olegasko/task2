@@ -13,11 +13,9 @@ import java.util.stream.Collectors;
 public class ExampleServiceImpl implements ExampleService {
 
     private ExampleDaoImpl dao;
-//    private ExampleEntity entity;
 
     public ExampleServiceImpl(ExampleDaoImpl dao) {
         this.dao = dao;
-//        this.entity = entity;
     }
 
     @Override
@@ -26,13 +24,13 @@ public class ExampleServiceImpl implements ExampleService {
             throw new IllegalArgumentException("Price shouldn't be null");
         }
         if (title.length() < 3 || title.length() > 20) {
-            return;
+            throw new IllegalArgumentException("Tittle length should be from 3 to 20");
         }
         if (price.scale() > 2) {
             price = price.setScale(2, RoundingMode.HALF_UP);
         }
         if (price.longValue() < 15) {
-            return;
+            throw new IllegalArgumentException("Price should be 15 or more");
         }
         ExampleEntity entity = new ExampleEntity();
         entity.setId(new Random().nextLong());
@@ -43,14 +41,6 @@ public class ExampleServiceImpl implements ExampleService {
             throw new IllegalArgumentException("Title is should be unique");
         }
     }
-
-    /**
-     * Prepare storage statistic of items average prices per day they were added.
-     * In case no items were added in concrete day - the day shouldn't be present in the final result
-     *
-     * @return {@link Map} of statistic results, where key is the day when items were stored, and
-     * the value is actual average cost of all items stored during that day
-     */
 
     @Override
     public Map<LocalDate, BigDecimal> getStatistic() {

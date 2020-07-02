@@ -16,18 +16,18 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class ExampleServiceImplTest {
 
-    public static final String PROPER_TITLE = "proper title";
-    public static final BigDecimal PRICE_FOR_ROUND  = BigDecimal.valueOf(16.568);
-    public static final BigDecimal PRICE_LESS_THAN_LOWER_LIMIT = BigDecimal.valueOf(14.49);
-    public static final BigDecimal NULL = null;
-    public static final BigDecimal PROPER_PRICE = BigDecimal.valueOf(15);
-    public static final String TITLE_NOT_UNIQUE = "Title not unique";
-    public static final String TOO_LONG_TITLE = "Too long title - 11111111111111";
+    private static final String PROPER_TITLE = "proper title";
+    private static final BigDecimal PRICE_FOR_ROUND  = BigDecimal.valueOf(16.568);
+    private static final BigDecimal PRICE_LESS_THAN_LOWER_LIMIT = BigDecimal.valueOf(14.49);
+    private static final BigDecimal EMPTY_PRICE = null;
+    private static final BigDecimal PROPER_PRICE = BigDecimal.valueOf(15);
+    private static final String TITLE_NOT_UNIQUE = "Title not unique";
+    private static final String TOO_LONG_TITLE = "Too long title - 11111111111111";
 
     @Spy
-    ExampleDaoImpl dao;
+    private ExampleDaoImpl dao;
 
-    ExampleService service;
+    private ExampleService service;
 
     @Before
     public void before() {
@@ -40,15 +40,14 @@ public class ExampleServiceImplTest {
         verify(dao).store(any());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldNotStoreWhenPriceLessThenLowerLimit() {
         service.addNewItem(PROPER_TITLE, PRICE_LESS_THAN_LOWER_LIMIT);
-        verify(dao, times(0)).store(any());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenPriceIsNull() {
-        service.addNewItem(PROPER_TITLE, NULL);
+        service.addNewItem(PROPER_TITLE, EMPTY_PRICE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -63,9 +62,8 @@ public class ExampleServiceImplTest {
         verify(dao, times(1)).store(any());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldNotStoreWhenTitleLengthOutOfRange() {
         service.addNewItem(TOO_LONG_TITLE, PROPER_PRICE);
-        verify(dao, times(0)).store(any());
     }
 }
